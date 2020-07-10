@@ -1,0 +1,481 @@
+{
+  "intents": [
+    {
+      "intent": "Comprar",
+      "examples": [
+        {
+          "text": "Quero comprar uma pizza"
+        },
+        {
+          "text": "Desce uma pizza ai"
+        },
+        {
+          "text": "Hoje me deu uma vontade de comer pizza me ve uma"
+        },
+        {
+          "text": "Me uma pizza de calabresa"
+        },
+        {
+          "text": "uma pizza de rucula fazendo favor"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "intent": "Cardapio",
+      "examples": [
+        {
+          "text": "Tem pizza de que"
+        },
+        {
+          "text": "quero o cardapio"
+        },
+        {
+          "text": "quais sabores voce tem"
+        },
+        {
+          "text": "Posso ver o menu"
+        },
+        {
+          "text": "Estou indeciso e gostaria de ver o cardapio"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "intent": "Saudacao",
+      "examples": [
+        {
+          "text": "Bom dia"
+        },
+        {
+          "text": "Boa tarde"
+        },
+        {
+          "text": "Boa noite"
+        },
+        {
+          "text": "Oi"
+        },
+        {
+          "text": "Olá"
+        },
+        {
+          "text": "Iae"
+        }
+      ],
+      "description": ""
+    }
+  ],
+  "entities": [
+    {
+      "entity": "tamanho",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "média",
+          "synonyms": [
+            "m"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "grande",
+          "synonyms": [
+            "g",
+            "familia"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "puquena",
+          "synonyms": [
+            "p"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "cep",
+      "values": [
+        {
+          "type": "patterns",
+          "value": "zip",
+          "patterns": [
+            "(\\d{5}-\\d{3})",
+            "(\\d{8})"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "Sabores",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "calabresa",
+          "synonyms": [
+            "linguiça"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "mussarela",
+          "synonyms": [
+            "queijo",
+            "muçarela"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "rucula",
+          "synonyms": []
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "Formal",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "Boa tarde",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "Boa noite",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "Bom dia",
+          "synonyms": []
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "sys-number",
+      "values": [],
+      "fuzzy_match": true
+    }
+  ],
+  "metadata": {
+    "api_version": {
+      "major_version": "v2",
+      "minor_version": "2018-11-08"
+    }
+  },
+  "webhooks": [
+    {
+      "url": "",
+      "name": "main_webhook",
+      "headers": []
+    }
+  ],
+  "dialog_nodes": [
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "temos de pizzas de mussarela, calabresa e rucula"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_5_1594405315746",
+      "conditions": "#Cardapio",
+      "dialog_node": "node_8_1594405325523"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Olá qual o seu pedido"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "Bem-vindo",
+      "conditions": "anything_else",
+      "dialog_node": "response_10_1594404616943",
+      "previous_sibling": "response_6_1594404548849"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "@Formal"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "Bem-vindo",
+      "conditions": "@Formal",
+      "dialog_node": "response_6_1594404548849"
+    },
+    {
+      "type": "event_handler",
+      "output": {
+        "text": {
+          "values": [
+            "Qual seu cep(entre no formato 00000-000)"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "parent": "slot_10_1594404815742",
+      "event_name": "focus",
+      "dialog_node": "handler_6_1594404815754",
+      "previous_sibling": "handler_7_1594404815754"
+    },
+    {
+      "type": "event_handler",
+      "output": {},
+      "parent": "slot_10_1594404815742",
+      "context": {
+        "cep": "@cep"
+      },
+      "conditions": "@cep",
+      "event_name": "input",
+      "dialog_node": "handler_7_1594404815754"
+    },
+    {
+      "type": "event_handler",
+      "output": {
+        "text": {
+          "values": [
+            "Qual o tamanho"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "parent": "slot_7_1594404792067",
+      "event_name": "focus",
+      "dialog_node": "handler_7_1594404792079",
+      "previous_sibling": "handler_10_1594404792079"
+    },
+    {
+      "type": "event_handler",
+      "output": {},
+      "parent": "slot_7_1594404792067",
+      "context": {
+        "tamanho": "@tamanho"
+      },
+      "conditions": "@tamanho",
+      "event_name": "input",
+      "dialog_node": "handler_10_1594404792079"
+    },
+    {
+      "type": "slot",
+      "parent": "node_1_1594404680531",
+      "variable": "$Sabores",
+      "dialog_node": "slot_6_1594404731469",
+      "previous_sibling": "response_4_1594405465454"
+    },
+    {
+      "type": "slot",
+      "parent": "node_1_1594404680531",
+      "variable": "$cep",
+      "dialog_node": "slot_10_1594404815742",
+      "previous_sibling": "slot_7_1594404792067"
+    },
+    {
+      "type": "slot",
+      "parent": "node_1_1594404680531",
+      "variable": "$tamanho",
+      "dialog_node": "slot_7_1594404792067",
+      "previous_sibling": "slot_6_1594404731469"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Saindo uma pizza sabor <? $Sabores ?> de tamanho <? $tamanho ?> para o cep <? @cep.literal ?>"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1594404680531",
+      "disabled": true,
+      "dialog_node": "response_4_1594405465454"
+    },
+    {
+      "type": "event_handler",
+      "output": {
+        "text": {
+          "values": [
+            "Qual sabor"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "parent": "slot_6_1594404731469",
+      "event_name": "focus",
+      "dialog_node": "handler_7_1594404731496",
+      "previous_sibling": "handler_10_1594404731496"
+    },
+    {
+      "type": "event_handler",
+      "output": {},
+      "parent": "slot_6_1594404731469",
+      "context": {
+        "Sabores": "@Sabores"
+      },
+      "conditions": "@Sabores",
+      "event_name": "input",
+      "dialog_node": "handler_10_1594404731496"
+    },
+    {
+      "type": "frame",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Saindo uma pizza sabor <? $Sabores ?> de tamanho <? $tamanho ?> para o cep <? @cep.literal ?>"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "metadata": {
+        "callout": {
+          "name": "main_webhook",
+          "type": "webhook",
+          "parameters": {
+            "": ""
+          },
+          "result_variable": "webhook_result_1"
+        },
+        "_customization": {
+          "mcr": false
+        }
+      },
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "body",
+        "dialog_node": "node_9_1594405150424"
+      },
+      "conditions": "#Comprar",
+      "digress_in": "does_not_return",
+      "dialog_node": "node_1_1594404680531",
+      "digress_out": "allow_all",
+      "previous_sibling": "node_5_1594405315746",
+      "digress_out_slots": "allow_returning"
+    },
+    {
+      "type": "folder",
+      "digress_in": "returns",
+      "dialog_node": "node_5_1594405315746",
+      "previous_sibling": "Bem-vindo"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "<? context.clear() ?>"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "true",
+      "dialog_node": "node_9_1594405150424",
+      "previous_sibling": "Em outros casos"
+    },
+    {
+      "type": "standard",
+      "title": "Em outros casos",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Eu não entendi. Você pode tentar reformular a frase."
+              },
+              {
+                "text": "Você pode reformular sua afirmação? Eu não estou entendendo."
+              },
+              {
+                "text": "Eu não entendi o sentido."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "anything_else",
+      "dialog_node": "Em outros casos",
+      "previous_sibling": "node_1_1594404680531",
+      "disambiguation_opt_out": true
+    },
+    {
+      "type": "standard",
+      "title": "Bem-vindo",
+      "metadata": {
+        "_customization": {
+          "mcr": true
+        }
+      },
+      "conditions": "welcome || #Saudacao",
+      "dialog_node": "Bem-vindo"
+    }
+  ],
+  "counterexamples": [],
+  "system_settings": {
+    "disambiguation": {
+      "prompt": "Você quis dizer:",
+      "enabled": true,
+      "randomize": true,
+      "max_suggestions": 5,
+      "suggestion_text_policy": "title",
+      "none_of_the_above_prompt": "Nenhuma das anteriores"
+    },
+    "system_entities": {
+      "enabled": true
+    },
+    "human_agent_assist": {
+      "prompt": "Você quis dizer:"
+    }
+  },
+  "learning_opt_out": false,
+  "name": "Pizza - JP",
+  "language": "pt-br",
+  "description": ""
+}
